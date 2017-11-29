@@ -9,23 +9,17 @@ public class file_server
 {
 
 	private static final ServerThread[] threads = new ServerThread[100];
-	public static final int port = 7899;
+	public static final int port = 6789;
 	private static Socket socket;
 	private static ServerSocket chatr;
 	public volatile static int join_id[][] = new int[100][100];
 	public volatile static int chat_id[][] = new int[100][100];
 	int counter = 100;
 	
-	
-	
-	
-	
-	
-	
 	public void runServer() throws IOException
 	{
 		chatr = new ServerSocket(port);
-		System.out.println("Server ready for connections..");
+		System.out.println("File Server ready for connections..");
 		
 		while(true)
 		{
@@ -78,6 +72,54 @@ class ServerThread extends Thread {
 			ServerThread.chat_id = chat_id;
 			this. counter = counter;
 		}
+		public void checkmsg(String input) throws IOException
+		{
+			if(input.startsWith("READ: "))
+			{
+				readfile(input.substring(6));
+			}
+			else if(input.startsWith("WRITE: "))
+			{
+				writefile(input.substring(7));
+			}
+			else if(input.startsWith("RECEIVE: "))
+			{
+				receivefile(input.substring(9));
+			}
+		}
+		
+		public void readfile(String file_name)throws IOException
+		{
+			System.out.println("Inside read");
+			File file = new File(file_name);
+			byte[] mybytearray = new byte[(int) file.length()];
+
+            FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            
+
+            DataInputStream dis = new DataInputStream(bis);
+            dis.readFully(mybytearray, 0, mybytearray.length);
+
+            //handle file send over socket
+            OutputStream os = socket.getOutputStream();
+
+            //Sending file name and file size to the server
+            DataOutputStream dos = new DataOutputStream(os);
+            dos.writeUTF(file.getName());
+            dos.writeLong(mybytearray.length);
+            dos.write(mybytearray, 0, mybytearray.length);
+            dos.flush();
+		}
+		
+		public void writefile(String file_name)
+		{
+			
+		}
+		public void receivefile(String file_name)
+		{
+			
+		}
 		
 		public void run()
 		{
@@ -88,6 +130,11 @@ class ServerThread extends Thread {
 				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			    ps = new PrintStream(socket.getOutputStream());
 				
+			    while(true)
+			    {
+			    		String input = br.readLine();
+			    		checkmsg(input);
+			    }
 			    
 				
 			}
