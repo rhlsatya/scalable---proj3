@@ -14,14 +14,17 @@ public class client {
 
     public static void main(String[] args) throws IOException {
         
+    	
+    		
         sock = new Socket("localhost", 6789);
         br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter File Name");
+        sendFile();
+        /*System.out.println("Enter File Name");
         String fileName = br.readLine();
         os = new PrintStream(sock.getOutputStream());
         os.println("READ: " + fileName);
         receiveFile(fileName);
-             
+             */
         
 
 
@@ -30,35 +33,34 @@ public class client {
 
     
 
-    /*public static void sendFile() {
-        try {
+    public static void sendFile() throws IOException
+    {
+        
             System.err.print("Enter file name: ");
-            fileName = stdin.readLine();
+            fileName = br.readLine();
+            os = new PrintStream(sock.getOutputStream());
+            os.println("RECEIVE: " + fileName);
+            File file = new File(fileName);
+			byte[] mybytearray = new byte[(int) file.length()];
 
-            File myFile = new File(fileName);
-            byte[] mybytearray = new byte[(int) myFile.length()];
-
-            FileInputStream fis = new FileInputStream(myFile);
+            FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            //bis.read(mybytearray, 0, mybytearray.length);
+            
 
             DataInputStream dis = new DataInputStream(bis);
             dis.readFully(mybytearray, 0, mybytearray.length);
 
+            //handle file send over socket
             OutputStream os = sock.getOutputStream();
 
             //Sending file name and file size to the server
             DataOutputStream dos = new DataOutputStream(os);
-            dos.writeUTF(myFile.getName());
+            dos.writeUTF(file.getName());
             dos.writeLong(mybytearray.length);
             dos.write(mybytearray, 0, mybytearray.length);
             dos.flush();
-            System.out.println("File "+fileName+" sent to Server.");
-        } catch (Exception e) {
-            System.err.println("File does not exist!");
-        }
     }
-*/
+
     public static void receiveFile(String fileName)throws IOException
     {
         

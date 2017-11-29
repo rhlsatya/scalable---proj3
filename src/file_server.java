@@ -116,23 +116,42 @@ class ServerThread extends Thread {
 		{
 			
 		}
-		public void receivefile(String file_name)
+		public void receivefile(String file_name)throws IOException
 		{
-			
+			System.out.println("Inside receive");
+			int bytesRead;
+            InputStream in = socket.getInputStream();
+
+            DataInputStream clientData = new DataInputStream(in);
+
+            file_name = clientData.readUTF();
+            OutputStream output = new FileOutputStream(("received_from_client_" + file_name));
+            long size = clientData.readLong();
+            byte[] buffer = new byte[1024];
+            while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+                output.write(buffer, 0, bytesRead);
+                size -= bytesRead;
+            }
+
+            output.close();
+            in.close();
+
+            System.out.println("File "+file_name+" received from Client.");
 		}
 		
 		public void run()
 		{
 			try
 			{
-				
+				String input;
 				is = new DataInputStream(socket.getInputStream());
 				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			    ps = new PrintStream(socket.getOutputStream());
 				
 			    while(true)
 			    {
-			    		String input = br.readLine();
+			    	if((input = br.readLine()) != null)
+			    		
 			    		checkmsg(input);
 			    }
 			    
