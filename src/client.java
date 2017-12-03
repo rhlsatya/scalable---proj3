@@ -29,7 +29,7 @@ public class client {
         //String fileName = "abc.txt";
         os = new PrintStream(sock.getOutputStream());
         os.println("READ: " + fileName);
-        receiveFile(fileName);
+        //receiveFile(fileName);
              
         System.out.println("Received File4");
         
@@ -67,11 +67,12 @@ public class client {
             dos.flush();
     }
 
-    public static void receiveFile(String fileName)throws IOException
+    public static void receiveFile(String action, String fileName)throws IOException
     {
     			os = new PrintStream(sock.getOutputStream());
     			os.println("READ: " + fileName);
     			System.out.println("Received File3");
+    			System.out.println(action);
             int bytesRead;
             InputStream in = sock.getInputStream();
             
