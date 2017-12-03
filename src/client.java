@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class client {
 	
@@ -12,16 +13,16 @@ public class client {
     private static BufferedReader br;
     private static PrintStream os;
     
-    public client()
+    public client() throws UnknownHostException, IOException
     {
-    		
+    		sock = new Socket("localhost", 6789);
     }
     
     public static void main(String[] args) throws IOException {
         
     	
     		fileName = "abc.txt";
-        sock = new Socket("localhost", 6789);
+        //sock = new Socket("localhost", 6789);
         br = new BufferedReader(new InputStreamReader(System.in));
         //sendFile();
         System.out.println("Enter File Name");
@@ -68,7 +69,8 @@ public class client {
 
     public static void receiveFile(String fileName)throws IOException
     {
-        		
+    			os = new PrintStream(sock.getOutputStream());
+    			os.println("READ: " + fileName);
     			System.out.println("Received File3");
             int bytesRead;
             InputStream in = sock.getInputStream();
