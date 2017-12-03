@@ -1,0 +1,12 @@
+PROTOCOLS:-
+To request to read file:-
+
+READ: file_name.txt
+
+To request to write file:-
+
+WRTIE: file_name.txt
+
+To send edited file:
+
+RECEIVE: file_name.txt

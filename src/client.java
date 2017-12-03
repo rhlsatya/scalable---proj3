@@ -11,22 +11,27 @@ public class client {
     private static String fileName;
     private static BufferedReader br;
     private static PrintStream os;
-
+    
+    public client()
+    {
+    		
+    }
+    
     public static void main(String[] args) throws IOException {
         
     	
-    		
+    		fileName = "abc.txt";
         sock = new Socket("localhost", 6789);
         br = new BufferedReader(new InputStreamReader(System.in));
-        sendFile();
-        /*System.out.println("Enter File Name");
-        String fileName = br.readLine();
+        //sendFile();
+        System.out.println("Enter File Name");
+        //String fileName = "abc.txt";
         os = new PrintStream(sock.getOutputStream());
         os.println("READ: " + fileName);
         receiveFile(fileName);
-             */
+             
+        System.out.println("Received File4");
         
-
 
         sock.close();
     }
@@ -63,21 +68,24 @@ public class client {
 
     public static void receiveFile(String fileName)throws IOException
     {
-        
+        		
+    			System.out.println("Received File3");
             int bytesRead;
             InputStream in = sock.getInputStream();
-
+            
             DataInputStream clientData = new DataInputStream(in);
-
+            System.out.println("Received File2");
             fileName = clientData.readUTF();
-            OutputStream output = new FileOutputStream(("received_from_server_" + fileName));
+            System.out.println("Received File1");
+            OutputStream output = new FileOutputStream((fileName + "_1"));
             long size = clientData.readLong();
             byte[] buffer = new byte[1024];
+            
             while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
                 output.write(buffer, 0, bytesRead);
                 size -= bytesRead;
             }
-
+            System.out.println("Received File");
             output.close();
             in.close();
 
