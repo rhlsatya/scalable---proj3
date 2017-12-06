@@ -109,47 +109,7 @@ public class client_gui extends JFrame implements ActionListener {
         	 frame.setResizable(true);
         	 frame.setLocationRelativeTo(null);
         	 frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        	 frame.setVisible(true);
-        	 
-        	 
-        	 
-        	 
-        	 
-        	 
-             /*JFrame frame = new JFrame("Test");
-             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-             try 
-             {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-             } catch (Exception e) {
-                e.printStackTrace();
-             }
-             JPanel panel = new JPanel();
-             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-             panel.setOpaque(true);
-             JTextArea textArea = new JTextArea(15, 50);
-             textArea.setWrapStyleWord(true);
-             textArea.setEditable(false);
-             textArea.setFont(Font.getFont(Font.SANS_SERIF));
-             JScrollPane scroller = new JScrollPane(textArea);
-             scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-             scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-             JPanel inputpanel = new JPanel();
-             inputpanel.setLayout(new FlowLayout());
-             JTextField input = new JTextField(20);
-             JButton button = new JButton("Enter");
-             DefaultCaret caret = (DefaultCaret) textArea.getCaret();
-             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-             panel.add(scroller);
-             inputpanel.add(input);
-             inputpanel.add(button);
-             panel.add(inputpanel);
-             frame.getContentPane().add(BorderLayout.CENTER, panel);
-             frame.pack();
-             frame.setLocationByPlatform(true);
-             frame.setVisible(true);
-             frame.setResizable(false);
-             input.requestFocus();*/
+        	 frame.setVisible(true);    	 
          }
      });
  }
@@ -173,16 +133,6 @@ public class client_gui extends JFrame implements ActionListener {
 	         frame_login.dispose();
 	     }
 	 });
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 	 
 	 frame_login = new JFrame("Login");
 	 //frame.setLayout(new GridLayout(1,3));
@@ -210,8 +160,9 @@ public class client_gui extends JFrame implements ActionListener {
 	 frame_login.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	 frame_login.setVisible(true);
 	 
-	 
  }
+ 
+ 
 
 public void getFile() 
 {
