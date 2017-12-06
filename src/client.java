@@ -1,4 +1,5 @@
 
+import java.sql.*;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -16,39 +17,47 @@ public class client {
     public client() throws UnknownHostException, IOException
     {
     		sock = new Socket("localhost", 6789);
+    		br = new BufferedReader(new InputStreamReader(System.in));
     }
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException 
+    {
         
-    	
+    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scalable", "root", "rahulsatya");
+    		Statement stat = con.createStatement();
+    		ResultSet rs = stat.executeQuery("select * from File Directory");
+    		
+    		while(rs.next())
+    		{
+    			System.out.println(rs.getString("File ID"));
+    		}
+    		
     		fileName = "abc.txt";
         //sock = new Socket("localhost", 6789);
         br = new BufferedReader(new InputStreamReader(System.in));
         //sendFile();
         System.out.println("Enter File Name");
         //String fileName = "abc.txt";
-        os = new PrintStream(sock.getOutputStream());
-        os.println("READ: " + fileName);
+        //os = new PrintStream(sock.getOutputStream());
+        //os.println("READ: " + fileName);
         //receiveFile(fileName);
              
-        System.out.println("Received File4");
+        //System.out.println("Received File4");
         
 
-        sock.close();
+        //sock.close();
     }
 
     
 
-    public static void sendFile() throws IOException
+    public static void sendFile(String fileName) throws IOException
     {
-        
-            System.err.print("Enter file name: ");
-            fileName = br.readLine();
+    			
             os = new PrintStream(sock.getOutputStream());
             os.println("RECEIVE: " + fileName);
-            File file = new File(fileName);
+            File file = new File("1_" + fileName);
 			byte[] mybytearray = new byte[(int) file.length()];
-
+		
             FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);
             
@@ -61,7 +70,7 @@ public class client {
 
             //Sending file name and file size to the server
             DataOutputStream dos = new DataOutputStream(os);
-            dos.writeUTF(file.getName());
+            dos.writeUTF(fileName);
             dos.writeLong(mybytearray.length);
             dos.write(mybytearray, 0, mybytearray.length);
             dos.flush();
@@ -70,7 +79,7 @@ public class client {
     public static void receiveFile(String action, String fileName)throws IOException
     {
     			os = new PrintStream(sock.getOutputStream());
-    			os.println("READ: " + fileName);
+    			os.println(action + ": " + fileName);
     			System.out.println("Received File3");
     			System.out.println(action);
             int bytesRead;
@@ -80,7 +89,7 @@ public class client {
             System.out.println("Received File2");
             fileName = clientData.readUTF();
             System.out.println("Received File1");
-            OutputStream output = new FileOutputStream((fileName + "_1"));
+            OutputStream output = new FileOutputStream(("1_" + fileName));
             long size = clientData.readLong();
             byte[] buffer = new byte[1024];
             
@@ -89,8 +98,8 @@ public class client {
                 size -= bytesRead;
             }
             System.out.println("Received File");
-            output.close();
-            in.close();
+            //output.close();
+            //in.close();
 
             System.out.println("File "+fileName+" received from Server.");
         

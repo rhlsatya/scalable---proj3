@@ -10,3 +10,6 @@ WRTIE: file_name.txt
 To send edited file:
 
 RECEIVE: file_name.txt
+
+change
+edit 2

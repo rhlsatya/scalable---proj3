@@ -3,8 +3,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-
+import java.sql.*;
 public class file_server 
 {
 
@@ -15,7 +14,7 @@ public class file_server
 	public volatile static int join_id[][] = new int[100][100];
 	public volatile static int chat_id[][] = new int[100][100];
 	int counter = 100;
-	
+		
 	public void runServer() throws IOException
 	{
 		chatr = new ServerSocket(port);
@@ -80,6 +79,7 @@ class ServerThread extends Thread {
 			}
 			else if(input.startsWith("WRITE: "))
 			{
+				System.out.println("inside write 1");
 				writefile(input.substring(7));
 			}
 			else if(input.startsWith("RECEIVE: "))
@@ -112,33 +112,55 @@ class ServerThread extends Thread {
             dos.flush();
 		}
 		
-		public void writefile(String file_name)
+		public void writefile(String file_name) throws IOException
 		{
-			
+			System.out.println("Inside write");
+			File file = new File(file_name);
+			byte[] mybytearray = new byte[(int) file.length()];
+
+            FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            
+
+            DataInputStream dis = new DataInputStream(bis);
+            dis.readFully(mybytearray, 0, mybytearray.length);
+
+            //handle file send over socket
+            OutputStream os = socket.getOutputStream();
+
+            //Sending file name and file size to the server
+            DataOutputStream dos = new DataOutputStream(os);
+            dos.writeUTF(file.getName());
+            dos.writeLong(mybytearray.length);
+            dos.write(mybytearray, 0, mybytearray.length);
+            dos.flush();
 		}
-		public void receivefile(String file_name)throws IOException
+		
+		public void receivefile(String fileName)throws IOException
 		{
-			System.out.println("Inside receive");
+			//fileName = "abc.txt";
 			int bytesRead;
             InputStream in = socket.getInputStream();
-
+            
             DataInputStream clientData = new DataInputStream(in);
-
-            file_name = clientData.readUTF();
-            OutputStream output = new FileOutputStream(("received_from_client_" + file_name));
+            System.out.println("Received File2");
+            fileName = clientData.readUTF();
+            System.out.println("Received File1");
+            OutputStream output = new FileOutputStream((fileName));
             long size = clientData.readLong();
             byte[] buffer = new byte[1024];
+            
             while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
                 output.write(buffer, 0, bytesRead);
                 size -= bytesRead;
             }
+            System.out.println("Received File");
+            //output.close();//closing these was resulting in a closed connection or something. Check 
+            //in.close();
 
-            output.close();
-            in.close();
-
-            System.out.println("File "+file_name+" received from Client.");
+            System.out.println("File "+fileName+" received from Client.");
+     
 		}
-		
 		public void run()
 		{
 			try
