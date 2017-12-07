@@ -31,6 +31,7 @@ public class client_gui extends JFrame implements ActionListener {
  private JRadioButton r1;
  private JRadioButton r2;
  private ButtonGroup bg;
+ private JLabel label;
  //private JTextField toRead;
  private JTextArea toRead;
  private ButtonModel buttonModel;
@@ -140,7 +141,12 @@ public class client_gui extends JFrame implements ActionListener {
 	    	 			createFrame();
 	    	 			frame_login.dispose();
 	    	 		}
-	    	 		//else()
+	    	 		else
+	    	 		{
+	    	 			username.setText(null);
+	    	 			password.setText(null);
+	    	 			label.setText("<html> <font color='red'>Incorrect Username or Password</font></html>");
+	    	 		}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -150,12 +156,11 @@ public class client_gui extends JFrame implements ActionListener {
 	 
 	 frame_login = new JFrame("Login");
 	 //frame.setLayout(new GridLayout(1,3));
-	 
 	 p = new JPanel(new GridLayout(3,1));
 	 //p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 	 //p2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
 	 
-	 
+	 label = new JLabel();
 	 p.add(l1);
 	 p.add(username);
 	 p.add(l2);
@@ -164,6 +169,7 @@ public class client_gui extends JFrame implements ActionListener {
 	 //p2.add(toRead);
 	 
 	 //frame.getContentPane().add(BorderLayout.NORTH,returnFile);
+	 frame_login.add(BorderLayout.NORTH,label);
 	 frame_login.add(BorderLayout.CENTER,p);
 	 frame_login.add(BorderLayout.SOUTH,login);
 	 //frame.getContentPane().add(BorderLayout.CENTER,toRead);
