@@ -129,8 +129,22 @@ public class client_gui extends JFrame implements ActionListener {
 	     {
 	    	 	String uname = new String(username.getText());
 	    	 	String pass = new String(password.getText());
-	         createFrame();
-	         frame_login.dispose();
+	    	 	client_security cs;
+			try {
+				cs = new client_security();
+				
+	    	 		boolean b = cs.verify_client(uname, pass);
+	    	 		System.out.println("back from verification");
+	    	 		if(b == true)
+	    	 		{
+	    	 			createFrame();
+	    	 			frame_login.dispose();
+	    	 		}
+	    	 		//else()
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	     }
 	 });
 	 

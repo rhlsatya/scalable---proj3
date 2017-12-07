@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 
 public class client {
 	
@@ -23,14 +24,7 @@ public class client {
     public static void main(String[] args) throws IOException, SQLException 
     {
         
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scalable", "root", "rahulsatya");
-    		Statement stat = con.createStatement();
-    		ResultSet rs = stat.executeQuery("select * from File Directory");
     		
-    		while(rs.next())
-    		{
-    			System.out.println(rs.getString("File ID"));
-    		}
     		
     		fileName = "abc.txt";
         //sock = new Socket("localhost", 6789);
@@ -74,6 +68,7 @@ public class client {
             dos.writeLong(mybytearray.length);
             dos.write(mybytearray, 0, mybytearray.length);
             dos.flush();
+            //Files.delete("1_" + fileName);
     }
 
     public static void receiveFile(String action, String fileName)throws IOException
