@@ -26,7 +26,8 @@ public class client_gui extends JFrame implements ActionListener {
  private JPanel p, p1, p2;
  private JButton getFile;
  private JButton returnFile;
- 
+ private String uname;
+ private static String address;
  private JTextField box;
  private JRadioButton r1;
  private JRadioButton r2;
@@ -115,6 +116,10 @@ public class client_gui extends JFrame implements ActionListener {
      });
  }
  
+ public client_gui(String adr)throws IOException
+ {
+	 
+ }
  
  public client_gui()throws IOException
  {
@@ -128,7 +133,7 @@ public class client_gui extends JFrame implements ActionListener {
 	 {
 	     public void actionPerformed(ActionEvent e)
 	     {
-	    	 	String uname = new String(username.getText());
+	    	 	uname = new String(username.getText());
 	    	 	String pass = new String(password.getText());
 	    	 	client_security cs;
 			try {
@@ -183,6 +188,10 @@ public class client_gui extends JFrame implements ActionListener {
  }
  
  
+ public void verify_user_access()
+ {
+	 
+ }
 
 public void getFile() 
 {
@@ -200,14 +209,26 @@ public void getFile()
                 action = button.getText();
             }
         }
+		client_security cs = new client_security();
+		boolean b = cs.verify_file_access(uname, fileName, action);
+		System.out.println("back from file access");
+		if(b == true)
+		{
 		if(action.equals("WRITE"))
 			toRead.setEditable(true);
-		cl.receiveFile(action, fileName);
-		FileReader reader = new FileReader("1_" + fileName);
+		cl.receiveFile(action, address, fileName);
+		FileReader reader = new FileReader((address + "1_" + fileName + ".txt"));
 	    BufferedReader br = new BufferedReader(reader);
 	    toRead.read( br, null );
 	    br.close();
 	    toRead.requestFocus();
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(frame, "You do not have " + action.toLowerCase() + " access to that file!");
+			box.setText(null);
+			
+		}
 	} 
 	catch (IOException e1) 
 	{
@@ -217,16 +238,20 @@ public void getFile()
 	
 }
 
+public static void get_address(String adr)
+{
+	address = adr;
+}
 
 public void returnFile() 
 {
 	// TODO Auto-generated method stub
-	try (BufferedWriter fileOut = new BufferedWriter(new FileWriter("1_" + fileName))) 
+	try (BufferedWriter fileOut = new BufferedWriter(new FileWriter((address + "1_" + fileName + ".txt")))) 
 	{
 	    toRead.write(fileOut);
 	    client cl = new client();
 	    System.out.println("filename - " + fileName);
-	    cl.sendFile(fileName);
+	    cl.sendFile((address + fileName + ".txt"));
 	    toRead.setText(null);
 	}
 	catch (IOException e1) 

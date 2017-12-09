@@ -71,11 +71,11 @@ public class client {
             //Files.delete("1_" + fileName);
     }
 
-    public static void receiveFile(String action, String fileName)throws IOException
+    public static void receiveFile(String action, String adr, String fileName)throws IOException
     {
     			os = new PrintStream(sock.getOutputStream());
-    			os.println(action + ": " + fileName);
-    			System.out.println("Received File3");
+    			os.println(action + ": " + (adr + fileName + ".txt"));
+    			System.out.println("Received File3   " + fileName);
     			System.out.println(action);
             int bytesRead;
             InputStream in = sock.getInputStream();
@@ -83,8 +83,8 @@ public class client {
             DataInputStream clientData = new DataInputStream(in);
             System.out.println("Received File2");
             fileName = clientData.readUTF();
-            System.out.println("Received File1");
-            OutputStream output = new FileOutputStream(("1_" + fileName));
+            System.out.println("Received File1   " + fileName);
+            OutputStream output = new FileOutputStream((adr + "1_" + fileName));
             long size = clientData.readLong();
             byte[] buffer = new byte[1024];
             

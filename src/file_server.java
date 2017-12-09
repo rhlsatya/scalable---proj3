@@ -92,6 +92,7 @@ class ServerThread extends Thread {
 		{
 			System.out.println("Inside read");
 			File file = new File(file_name);
+			System.out.println(file_name);
 			byte[] mybytearray = new byte[(int) file.length()];
 
             FileInputStream fis = new FileInputStream(file);
