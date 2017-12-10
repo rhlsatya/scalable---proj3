@@ -3,6 +3,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
+
+import com.mysql.jdbc.PerConnectionLRUFactory;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,6 +36,8 @@ public class client_gui extends JFrame implements ActionListener {
  private JRadioButton r2;
  private ButtonGroup bg;
  private JLabel label;
+ private String action;
+ private JScrollPane pane;
  //private JTextField toRead;
  private JTextArea toRead;
  private ButtonModel buttonModel;
@@ -79,6 +84,7 @@ public class client_gui extends JFrame implements ActionListener {
 
         		@Override
         		public void actionPerformed(ActionEvent e) {
+        			
         			returnFile();
         		}
         		 
@@ -88,7 +94,7 @@ public class client_gui extends JFrame implements ActionListener {
         	 box = new JTextField(10);
         	 toRead = new JTextArea();
         	 toRead.setEditable(false);
-        	 
+        	 pane = new JScrollPane(toRead);
         	 r1 = new JRadioButton("READ");
         	 r2 = new JRadioButton("WRITE"); 
         	 
@@ -105,7 +111,7 @@ public class client_gui extends JFrame implements ActionListener {
         	 
         	 frame.getContentPane().add(BorderLayout.NORTH,returnFile);
         	 frame.getContentPane().add(BorderLayout.SOUTH,p);
-        	 frame.getContentPane().add(BorderLayout.CENTER,toRead);
+        	 frame.getContentPane().add(BorderLayout.CENTER,pane);
         	 
         	 frame.setSize(800,600);
         	 frame.setResizable(true);
@@ -201,7 +207,7 @@ public void getFile()
 		//String s = new String(box.getText());
 		client cl = new client();
 		buttonModel = bg.getSelection();
-		String action = buttonModel.getActionCommand();
+		action = buttonModel.getActionCommand();
 		for (Enumeration<AbstractButton> buttons = bg.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
 
@@ -217,7 +223,7 @@ public void getFile()
 		if(action.equals("WRITE"))
 			toRead.setEditable(true);
 		cl.receiveFile(action, address, fileName);
-		FileReader reader = new FileReader((address + "1_" + fileName + ".txt"));
+		FileReader reader = new FileReader(("1_" + fileName + ".txt"));
 	    BufferedReader br = new BufferedReader(reader);
 	    toRead.read( br, null );
 	    br.close();
@@ -245,21 +251,24 @@ public static void get_address(String adr)
 
 public void returnFile() 
 {
+	if(action.equals("WRITE"))
+	{
 	// TODO Auto-generated method stub
-	try (BufferedWriter fileOut = new BufferedWriter(new FileWriter((address + "1_" + fileName + ".txt")))) 
+	try (BufferedWriter fileOut = new BufferedWriter(new FileWriter(("1_" + fileName + ".txt")))) 
 	{
 	    toRead.write(fileOut);
 	    client cl = new client();
-	    System.out.println("filename - " + fileName);
-	    cl.sendFile((address + fileName + ".txt"));
-	    toRead.setText(null);
+	    System.out.println("filename - " + fileName + "address  --" + address);
+	    cl.sendFile(address, (fileName + ".txt"));
+	   
 	}
 	catch (IOException e1) 
 	{
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-	
+	}
+	toRead.setText(null);
 }
 
 

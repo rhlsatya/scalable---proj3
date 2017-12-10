@@ -44,11 +44,11 @@ public class client {
 
     
 
-    public static void sendFile(String fileName) throws IOException
+    public static void sendFile(String address, String fileName) throws IOException
     {
     			
             os = new PrintStream(sock.getOutputStream());
-            os.println("RECEIVE: " + fileName);
+            os.println("RECEIVE: " + address + fileName);
             File file = new File("1_" + fileName);
 			byte[] mybytearray = new byte[(int) file.length()];
 		
@@ -84,7 +84,7 @@ public class client {
             System.out.println("Received File2");
             fileName = clientData.readUTF();
             System.out.println("Received File1   " + fileName);
-            OutputStream output = new FileOutputStream((adr + "1_" + fileName));
+            OutputStream output = new FileOutputStream(("1_" + fileName));
             long size = clientData.readLong();
             byte[] buffer = new byte[1024];
             

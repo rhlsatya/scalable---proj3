@@ -108,6 +108,7 @@ class ServerThread extends Thread {
             //Sending file name and file size to the server
             DataOutputStream dos = new DataOutputStream(os);
             dos.writeUTF(file.getName());
+            System.out.println(".getName - " + file.getName() );
             dos.writeLong(mybytearray.length);
             dos.write(mybytearray, 0, mybytearray.length);
             dos.flush();
@@ -142,12 +143,12 @@ class ServerThread extends Thread {
 			//fileName = "abc.txt";
 			int bytesRead;
             InputStream in = socket.getInputStream();
-            
+            String fname = fileName;
             DataInputStream clientData = new DataInputStream(in);
-            System.out.println("Received File2");
+            System.out.println("Received File2 -- " + fileName);
             fileName = clientData.readUTF();
-            System.out.println("Received File1");
-            OutputStream output = new FileOutputStream((fileName));
+            System.out.println("Received File1 -- " + fileName);
+            OutputStream output = new FileOutputStream((fname));//could get adress from the database and save this file there
             long size = clientData.readLong();
             byte[] buffer = new byte[1024];
             
