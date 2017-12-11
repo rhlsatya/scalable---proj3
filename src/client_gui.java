@@ -16,6 +16,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 import java.io.*;
@@ -85,7 +86,12 @@ public class client_gui extends JFrame implements ActionListener {
         		@Override
         		public void actionPerformed(ActionEvent e) {
         			
-        			returnFile();
+        			try {
+						returnFile();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
         		}
         		 
         	 }
@@ -216,18 +222,30 @@ public void getFile()
             }
         }
 		client_security cs = new client_security();
-		boolean b = cs.verify_file_access(uname, fileName, action);
+		char c = cs.verify_file_access(uname, fileName, action);
 		System.out.println("back from file access");
-		if(b == true)
+		if(c == 'y')
 		{
 		if(action.equals("WRITE"))
+		{
+			cs.lock_file(fileName);
+			System.out.println("file locked");
 			toRead.setEditable(true);
+		}
 		cl.receiveFile(action, address, fileName);
 		FileReader reader = new FileReader(("1_" + fileName + ".txt"));
 	    BufferedReader br = new BufferedReader(reader);
 	    toRead.read( br, null );
 	    br.close();
 	    toRead.requestFocus();
+	    cs.add_file_to_user(fileName, uname);
+		}
+		else if(c == 'l')
+		{
+			
+			JOptionPane.showMessageDialog(frame, "File is in being written and is therefore locked");
+			box.setText(null);
+			
 		}
 		else
 		{
@@ -249,25 +267,31 @@ public static void get_address(String adr)
 	address = adr;
 }
 
-public void returnFile() 
+public void returnFile() throws UnknownHostException, IOException 
 {
+	client_security cs = new client_security();
 	if(action.equals("WRITE"))
 	{
 	// TODO Auto-generated method stub
-	try (BufferedWriter fileOut = new BufferedWriter(new FileWriter(("1_" + fileName + ".txt")))) 
-	{
-	    toRead.write(fileOut);
-	    client cl = new client();
-	    System.out.println("filename - " + fileName + "address  --" + address);
-	    cl.sendFile(address, (fileName + ".txt"));
-	   
+		
+		try (BufferedWriter fileOut = new BufferedWriter(new FileWriter(("1_" + fileName + ".txt")))) 
+		{
+		    toRead.write(fileOut);
+		    client cl = new client();
+		    
+		    System.out.println("filename - " + fileName + "address  --" + address);
+		    cl.sendFile(address, (fileName + ".txt"));
+		    cs.unlock_file(fileName);
+		    
+		   
+		}
+		catch (IOException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
-	catch (IOException e1) 
-	{
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
-	}
+	cs.remove_file_from_user(uname);
 	toRead.setText(null);
 }
 
