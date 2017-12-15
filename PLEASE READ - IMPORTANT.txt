@@ -1,0 +1,24 @@
+List of other repositories used for assignment 3. All these repositories have been shared with the Distributors. 
+
+1. File Server with client (communication is using sockets):-
+
+Link : https://github.com/rhlsatya/scalable---proj3.git
+
+2. Directory Service:-
+
+Link : https://github.com/rhlsatya/direcotry_service.git
+
+3. Locking Service:-
+
+Link : https://github.com/rhlsatya/Scalable-locking.git
+
+4. Security Server (Only takes care of login authentications)
+
+Link - https://github.com/rhlsatya/scalable-proj3-security.git
+
+
+Important: I used a mysql database to keep track of users, files names and their machine addresses, locks and read and write permissions (mapping user ids and file ids together). 
+This database has been exported as an sql file and has been added to the File Server repository. The files I was using, however, were scattered across my system. I have added one of them to the project folder for testing purposes. 
+
+
+In case there are any issues please feel free to call me anytime for a demonstration. I’m not going anywhere over the holiday period. Thank you
