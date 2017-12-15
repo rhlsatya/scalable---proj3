@@ -39,9 +39,11 @@ public class client_gui extends JFrame implements ActionListener {
  private JLabel label;
  private String action;
  private JScrollPane pane;
+ public int count = 0;
  //private JTextField toRead;
  private JTextArea toRead;
  private ButtonModel buttonModel;
+ 
  public static void main(String[] args) throws IOException {
  
  new client_gui();
@@ -232,7 +234,9 @@ public void getFile()
 			System.out.println("file locked");
 			toRead.setEditable(true);
 		}
+		
 		cl.receiveFile(action, address, fileName);
+		
 		FileReader reader = new FileReader(("1_" + fileName + ".txt"));
 	    BufferedReader br = new BufferedReader(reader);
 	    toRead.read( br, null );
@@ -273,7 +277,7 @@ public void returnFile() throws UnknownHostException, IOException
 	if(action.equals("WRITE"))
 	{
 	// TODO Auto-generated method stub
-		
+		toRead.setEditable(false);
 		try (BufferedWriter fileOut = new BufferedWriter(new FileWriter(("1_" + fileName + ".txt")))) 
 		{
 		    toRead.write(fileOut);

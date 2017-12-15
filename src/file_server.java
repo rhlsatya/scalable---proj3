@@ -13,6 +13,7 @@ public class file_server
 	private static ServerSocket chatr;
 	public volatile static int join_id[][] = new int[100][100];
 	public volatile static int chat_id[][] = new int[100][100];
+	public volatile static String username[] = new String[100];
 	int counter = 100;
 		
 	public void runServer() throws IOException
@@ -30,7 +31,7 @@ public class file_server
 				{
 					//join_id[i][2] = counter;
 					counter++;
-					(threads[i] = new ServerThread(socket, threads, join_id, chat_id, port, counter)).start();
+					(threads[i] = new ServerThread(socket, threads, join_id, chat_id, port, counter, username)).start();
 					break;
 				}
 			}
@@ -59,14 +60,16 @@ class ServerThread extends Thread {
 		private BufferedReader br;
 		public String client_name;
 		public volatile static int join_id[][] = new int[100][100];
+		public volatile static String username[] = new String[100];
 		public volatile static int chat_id[][] = new int[100][100];
 		public int room_ref;
 		int counter; //to keep track of join id
-		ServerThread(Socket socket, ServerThread[] threads, int join_id[][], int chat_id[][], int port, int counter)
+		ServerThread(Socket socket, ServerThread[] threads, int join_id[][], int chat_id[][], int port, int counter, String username[])
 		{
 			this.socket = socket;
 			this.threads = threads;
 			this.port = port;
+			ServerThread.username = username;
 			ServerThread.join_id = join_id;
 			ServerThread.chat_id = chat_id;
 			this. counter = counter;
@@ -171,7 +174,7 @@ class ServerThread extends Thread {
 				is = new DataInputStream(socket.getInputStream());
 				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			    ps = new PrintStream(socket.getOutputStream());
-				
+			    
 			    while(true)
 			    {
 			    	if((input = br.readLine()) != null)

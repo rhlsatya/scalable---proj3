@@ -74,6 +74,8 @@ public class client {
     public static void receiveFile(String action, String adr, String fileName)throws IOException
     {
     			os = new PrintStream(sock.getOutputStream());
+    			
+    			
     			os.println(action + ": " + (adr + fileName + ".txt"));
     			System.out.println("Received File3   " + fileName);
     			System.out.println(action);
@@ -98,5 +100,14 @@ public class client {
 
             System.out.println("File "+fileName+" received from Server.");
         
+    }
+    
+    
+    public void inform_users(String fname)
+    {
+    		while(true)
+    		{
+    			
+    		}
     }
 }
